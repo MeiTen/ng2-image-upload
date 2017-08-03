@@ -25,6 +25,7 @@ export class ImageUploadComponent implements OnInit {
   showFileTooLargeMessage: boolean = false;
 
   @Input() beforeUpload: (UploadMetadata) => UploadMetadata | Promise<UploadMetadata> = data => data;
+  @Input() beforeRemove: () => boolean = () => true;
   @Input() buttonCaption: string = 'Select Images';
   @Input() clearButtonCaption: string = 'Clear';
   @Input() dropBoxMessage: string = 'Drop your images here!';
@@ -131,7 +132,9 @@ export class ImageUploadComponent implements OnInit {
   }
 
   private uploadSingleFile(fileHolder: FileHolder, url = this.url, customForm?: { [name: string]: any }) {
-    if (url) {
+    const beforeRemoveResult = this.beforeRemove();
+
+    if (beforeRemoveResult && url) {
       this.pendingFilesCounter++;
       fileHolder.pending = true;
 

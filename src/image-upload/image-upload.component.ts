@@ -36,6 +36,8 @@ export class ImageUploadComponent implements OnInit {
   isFileOver: boolean = false;
 
   @Input()
+  beforeRemove: () => boolean = () => true;
+  @Input()
   buttonCaption: string = 'Select Images';
   @Input()
   dropBoxMessage: string = 'Drop your images here!';
@@ -132,7 +134,9 @@ export class ImageUploadComponent implements OnInit {
   }
 
   private uploadSingleFile(fileHolder: FileHolder) {
-    if (this.url) {
+    const beforeRemoveResult = this.beforeRemove();
+
+    if (beforeRemoveResult && this.url) {
       this.pendingFilesCounter++;
       fileHolder.pending = true;
 
